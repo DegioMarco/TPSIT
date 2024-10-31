@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aforismi di Scienziati</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+        .text {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .button {
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #da0909;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #8a0b0b;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Aforismi di Scienziati</h1>
+    <div class="text">
+    <p id="text1">"La scienza non è altro che un affinamento del pensiero quotidiano." - Albert Einstein</p>
+    </div>
+    <button class="button" onclick="toggleText1()">nascodi Aforisma 1</button>
+
+    <div class="text">
+        <p id="text2">"La natura non fa nulla invano." - Aristotele</p>
+    </div>
+    <button class="button" onclick="toggleText2()">nascodi Aforisma 2</button>
+
+    <div class="text">
+        <p id="text3">"La scienza è il grande antidoto contro il veleno dell'entusiasmo e della superstizione." - Adam Smith</p>
+    </div>
+    <button class="button" onclick="toggleText3()">nascodi Aforisma 3</button>
+
+    <div class="text">
+        <p  id="text4">"La fisica non è solo un insieme di equazioni; è un modo di pensare." - Richard Feynman</p>
+    </div>
+    <button class="button" onclick="toggleText4()">nascodi Aforisma 4</button>
+
+    <div class="text">
+        <p id="text5">"La scienza avanza non per la verità, ma per la ragione." - Henri Poincaré</p>
+    </div>
+    <button class="button" onclick="toggleText5()">nascodi Aforisma 5</button>
+
+    <script>
+        function toggleText1()
+        {
+        const text = document.getElementById("text1");
+        text.style.display = "none"; 
+        
+        } 
+        function toggleText2()
+        {
+        const text = document.getElementById("text2");
+        text.style.display = "none"; 
+        
+        } 
+        function toggleText3()
+        {
+        const text = document.getElementById("text3");
+        text.style.display = "none"; 
+        
+        } 
+        function toggleText4()
+        {
+        const text = document.getElementById("text4");
+        text.style.display = "none"; 
+        
+        } 
+        function toggleText5()
+        {
+        const text = document.getElementById("text5");
+        text.style.display = "none"; 
+        
+        } 
+        </script>
+
+</body>
+</html>

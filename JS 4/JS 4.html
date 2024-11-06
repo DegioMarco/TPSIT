@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore di Dislivello</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgb(255, 255, 255);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input {
+            width: 97%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: #2852a7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #222689;
+        }
+        .risultato {
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+
+        .topnav {
+  overflow: hidden;
+  background-color: none;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 12px 14px;
+  text-decoration: none;
+  font-size: 12px;
+  border-radius: 5px;
+  background-color: #2852a7;
+}
+
+.topnav a:hover {
+  background-color: #222689;
+  color: black;
+  border-radius: 5px;
+}
+
+.topnav a.active {
+  background-color: #2852a7;
+  color: white;
+  border-radius: 5px;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body style="margin: 0; 
+        background-image: url('https://i.pinimg.com/originals/e6/00/c9/e600c99974576450e8e803d453297434.jpg'); 
+        background-size: cover; 
+        background-position: center; 
+        background-repeat: no-repeat;">
+
+<div class="topnav" id="myTopnav">
+
+    <a href="https://github.com/DegioMarco/TPSIT/blob/d2b79ee397e13dce1b7b30b656a1c2f9d0cefdf3/SchedaPersonale/Scheda%20parsonale%20v1.html" target="_blank">Codice su GitHub</a>
+  
+
+    <div class="container">
+        <h1>Calcolatore di Dislivello</h1>
+        <label for="partenza">Altezza Punto di Partenza (m):</label>
+        <input type="number" id="partenza" required>
+        
+        <label for="pausa">Altezza Punto di Pausa (m):</label>
+        <input type="number" id="pausa" required>
+        
+        <label for="arrivo">Altezza Punto di Arrivo (m):</label>
+        <input type="number" id="arrivo" required>
+        
+        <button id="calcola">Calcola Dislivello</button>
+        
+        <div id="risultato" class="risultato"></div>
+        <canvas id="grafico" width="400" height="200"></canvas>
+    </div>
+
+    <script>
+        let grafico;
+
+        document.getElementById('calcola').addEventListener('click', function() {
+            const partenza = parseFloat(document.getElementById('partenza').value);
+            const pausa = parseFloat(document.getElementById('pausa').value);
+            const arrivo = parseFloat(document.getElementById('arrivo').value);
+            
+            if (isNaN(partenza) || isNaN(pausa) || isNaN(arrivo)) {
+                document.getElementById('risultato').innerText = "Inserire tutte le altezze.";
+                return;
+            }
+
+            const dislivelloTotale = Math.abs(arrivo - partenza) + Math.abs(pausa - partenza) + Math.abs(arrivo - pausa);
+            document.getElementById('risultato').innerText = `Dislivello Totale: ${dislivelloTotale} metri`;
+            
+            if (grafico) {
+                grafico.destroy();
+            }
+
+            const ctx = document.getElementById('grafico').getContext('2d');
+            grafico = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Partenza', 'Pausa', 'Arrivo'],
+                    datasets: [{
+                        label: 'Altezza (m)',
+                        data: [partenza, pausa, arrivo],
+                        borderColor: 'rgba(75, 195, 195, 1)',
+                        backgroundColor: 'rgba(75, 190, 190, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

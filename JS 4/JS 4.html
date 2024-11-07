@@ -143,7 +143,7 @@
                 return;
             }
 
-            const dislivelloTotale = Math.abs(arrivo - partenza) + Math.abs(pausa - partenza) + Math.abs(arrivo - pausa);
+            const dislivelloTotale = Math.abs(pausa - partenza) + Math.abs(arrivo - pausa);
             document.getElementById('risultato').innerText = `Dislivello Totale: ${dislivelloTotale} metri`;
             
             if (grafico) {

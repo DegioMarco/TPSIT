@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>setInterval</h1>
+    <p> Stampa un numero che aumenta ad ogni click e ad ogni secondo 
+    </p>
+    <button onclick="getTime()">click</button>
+
+    <div>
+            <p id="out1"></p>
+
+    </div>
+
+
+    <script>
+        const Output = document.getElementById("out1");
+        let n = 0;
+
+        setInterval(getTime,1000);
+        function getTime(){
+            n++; 
+            Output.innerHTML = n; 
+        }
+    </script>
+
+
+
+    
+</body>
+</html>

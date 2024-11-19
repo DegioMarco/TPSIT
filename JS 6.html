@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS6</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .countdown {
+            font-size: 5em;
+        }
+
+        .hidden-image {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown" id="countdown">3</div>
+    <div class="hidden-image" id="hiddenImage">
+        <img src="https://fein.com/fileadmin/Assets/Images/Products/Applications/e/c/d/ecd2a05752db4b860969c6e5fca1e906-1c21238033202c0b82e2b08812d2a6d5.jpg"  style="width: 500px; height: auto;"/>
+    </div>
+
+    <script>
+        let countdownNumber = 3;
+        const countdownElement = document.getElementById('countdown');
+        const hiddenImage = document.getElementById('hiddenImage');
+
+        const countdownInterval = setInterval(() => {
+            if (countdownNumber > 0) {
+                countdownElement.textContent = countdownNumber;
+                countdownNumber--;
+            } else {
+                clearInterval(countdownInterval);
+                countdownElement.style.display = 'none';
+                hiddenImage.style.display = 'block';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

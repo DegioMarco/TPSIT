@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morra Cinese</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color:lightslategray;
+            background-size: cover;
+            background-position: up;
+            background-repeat: no-repeat;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        #gioco, #botVsBotGame {
+            text-align: center;
+            display: none;
+            position: relative;
+            height: 400px; 
+            width: 500px;
+            margin: 50px auto;
+            background-color: rgba(0, 0, 0, 0.7); 
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .mode-button, .menu-button {
+            padding: 10px 20px;
+            background-color: #093cc9;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .mode-button:hover, .menu-button:hover {
+            background-color: #2b6cc0;
+        }
+
+        #backToMenuButton, #backToMenuFromBot {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #093cc9;
+            color: white;
+        }
+        #backToMenuButton:hover, #backToMenuFromBot:hover{
+            background-color: #2b6cc0;
+        }
+
+        #menu {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #menu-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .bot-choice-images {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #out1, #out2, #timer, #score {
+            font-size: 16px;
+            color: white;
+        }
+
+        #botVsBotResult {
+            font-size: 18px;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="menu">
+        <h1>Morra Cinese</h1>
+
+        <div id="menu-buttons">
+            <button class="mode-button" id="startGameButton">Inizia il Gioco</button>
+            <button class="mode-button" id="botVsBotButton">Bot vs Bot</button>
+        </div>
+    </div>
+
+    <div id="gioco">
+        <p id="out1">Scegli la tua mossa:</p>
+        <img src="pietra.png" alt="Pietra" id="pietra" />
+        <img src="carta.png" alt="Carta" id="carta" />
+        <img src="forbice.png" alt="Forbice" id="forbice" />
+        
+        <p id="out2"></p>
+        <p id="timer"></p>
+
+        <h2>Punteggio:</h2>
+        <p id="score">0 - 0</p>
+
+        <button class="menu-button" id="backToMenuButton">Torna al Menu</button>
+    </div>
+
+    <div id="botVsBotGame">
+        <div id="botVsBotContent">
+            <h2>Bot vs Bot</h2>
+            <p id="botVsBotResult"></p>
+            <button class="mode-button" id="startBotRoundButton">Inizia il Round</button>
+
+            <div class="bot-choice-images" id="botChoiceImages"></div>
+        </div>
+
+        <button class="menu-button" id="backToMenuFromBot">Torna al Menu</button>
+    </div>
+
+    <script>
+        let morra = ["pietra", "carta", "forbice"];
+        let scoreUser = 0;
+        let scoreBot = 0;
+        let numeroCasuale;
+        let timer;
+        let isBotVsBot = false;
+
+        function morraScore(userChoice, botChoice) {
+            if (userChoice === botChoice) {
+                return "Pareggio!";
+            } else if (
+                (userChoice === "pietra" && botChoice === "forbice") ||
+                (userChoice === "carta" && botChoice === "pietra") ||
+                (userChoice === "forbice" && botChoice === "carta")
+            ) {
+                scoreUser++;
+                return "Hai vinto!";
+            } else {
+                scoreBot++;
+                return "Hai perso!";
+            }
+        }
+
+
+        function getBotChoice() {
+            numeroCasuale = Math.floor(Math.random() * 3);
+            return morra[numeroCasuale];
+        }
+
+        function showBotChoices(botChoice1, botChoice2) {
+            let botChoiceImagesDiv = document.getElementById("botChoiceImages");
+            botChoiceImagesDiv.innerHTML = '';
+            const botImage1 = document.createElement("img");
+            botImage1.src = botChoice1 + ".png";
+            botChoiceImagesDiv.appendChild(botImage1);
+
+            const botImage2 = document.createElement("img");
+            botImage2.src = botChoice2 + ".png";
+            botChoiceImagesDiv.appendChild(botImage2);
+        }
+
+        function startGame(userChoice) {
+            let counter = 3;
+            let timerDisplay = document.getElementById("timer");
+            timerDisplay.innerHTML = `Inizio tra ${counter}...`;
+            
+            timer = setInterval(() => {
+                counter--;
+                timerDisplay.innerHTML = `Inizio tra ${counter}...`;
+                if (counter === 0) {
+                    clearInterval(timer);
+                    let botChoice = getBotChoice();
+                    let result;
+                    if (isBotVsBot) {
+
+                        let bot1Choice = getBotChoice();
+                        let bot2Choice = getBotChoice();
+                        result = morraScore(bot1Choice, bot2Choice);
+                        document.getElementById("botVsBotResult").innerHTML = 
+                            `Bot1 ha scelto: ${bot1Choice}. Bot2 ha scelto: ${bot2Choice}. ${result}`;
+                        showBotChoices(bot1Choice, bot2Choice);
+                    } else {
+                        result = morraScore(userChoice, botChoice);
+                        document.getElementById("out2").innerHTML = 
+                            `Bot ha scelto: ${botChoice}. ${result}`;
+                    }
+                    document.getElementById("score").innerHTML = `${scoreUser} - ${scoreBot}`;
+                }
+            }, 1000);
+        }
+
+        function showGame() {
+            document.getElementById("menu").style.display = "none";
+            document.getElementById("gioco").style.display = "block";
+        }
+
+        function backToMenu() {
+            document.getElementById("gioco").style.display = "none";
+            document.getElementById("botVsBotGame").style.display = "none";
+            document.getElementById("menu").style.display = "block";
+        }
+
+        function enableBotVsBot() {
+            isBotVsBot = true;
+            document.getElementById("menu").style.display = "none";
+            document.getElementById("botVsBotGame").style.display = "block";
+        }
+
+        document.getElementById("startGameButton").onclick = showGame;
+
+        document.getElementById("botVsBotButton").onclick = enableBotVsBot;
+
+        document.getElementById("pietra").onclick = function() {
+            startGame("pietra");
+        };
+        document.getElementById("carta").onclick = function() {
+            startGame("carta");
+        };
+        document.getElementById("forbice").onclick = function() {
+            startGame("forbice");
+        };
+
+        document.getElementById("backToMenuButton").onclick = backToMenu;
+
+        document.getElementById("backToMenuFromBot").onclick = backToMenu;
+
+        document.getElementById("startBotRoundButton").onclick = function() {
+            let counter = 3;
+            let timerDisplay = document.getElementById("botVsBotResult");
+            timerDisplay.innerHTML = `Round inizio tra ${counter}...`;
+            
+            timer = setInterval(() => {
+                counter--;
+                timerDisplay.innerHTML = `Round inizio tra ${counter}...`;
+                if (counter === 0) {
+                    clearInterval(timer);
+                    let bot1Choice = getBotChoice();
+                    let bot2Choice = getBotChoice();
+                    let result = morraScore(bot1Choice, bot2Choice);
+                    document.getElementById("botVsBotResult").innerHTML = 
+                        `Bot1 ha scelto: ${bot1Choice}. Bot2 ha scelto: ${bot2Choice}. ${result}`;
+                    showBotChoices(bot1Choice, bot2Choice);
+                }
+            }, 1000);
+        };
+    </script>
+
+</body>
+</html>

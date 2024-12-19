@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporizzatore con Numeri Casuali</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #ffffff, #ffffff);
+            font-family: Arial, sans-serif;
+        }
+        #numero {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        #media {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Estrazione di Numeri Casuali</h1>
+    <p id="numero">Numero Estratto: </p>
+    <p id="media">Media dei Numeri: </p>
+
+    <script>
+        let numeriEstratti = [];
+
+        function estraiNumeroCasuale() {
+            const numero = Math.floor(Math.random() * 90) + 1; 
+            numeriEstratti.push(numero); 
+            document.getElementById('numero').textContent = 'Numero Estratto: ' + numero; 
+
+            calcolaMedia(); 
+        }
+
+        function calcolaMedia() {
+            const somma = numeriEstratti.reduce((acc, num) => acc + num, 0);
+            const media = somma / numeriEstratti.length;
+            document.getElementById('media').textContent = 'Media dei Numeri: ' + media.toFixed(2);  
+        }
+
+
+        setInterval(estraiNumeroCasuale, 3000);
+    </script>
+
+</body>
+</html>

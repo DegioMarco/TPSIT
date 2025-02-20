@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="it" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Memory Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+      p {text-align: center;}
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 300px;
+        margin: 50px auto;
+        text-align: center;
+      }
+      .button {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        background-color: #444;
+        color: white;
+        font-size: 2em;
+        border: none;
+        transition: background-color 0.3s;
+      }
+      .flash {
+        background-color: #ff3300 !important;
+      }
+      .button:disabled {
+        cursor: not-allowed;
+        background-color: #333;
+      }
+      .timer {
+        font-size: 1.5em;
+        margin-top: 20px;
+      }
+      .container-custom {
+        max-width: 400px;
+      }
+
+      #endPopup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        display: none;
+        z-index: 1000;
+      }
+      #endPopup button {
+        margin-top: 10px;
+      }
+
+      .above-footer {
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body class="bg-dark text-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">Memory game</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#argomenti">Informazioni</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <header class="container mt-5 pt-5 text-center container-custom">
+      <h1 class="display-4">Memory</h1>
+      <p class="lead">Clicca sui bottoni nell'ordine giusto per guadagnare punti!
+        <br>Hai 10 secondi, ogni round più veloce!</p>
+    </header>
+
+    <div class="grid">
+      <button class="button" id="0"></button>
+      <button class="button" id="1"></button>
+      <button class="button" id="2"></button>
+      <button class="button" id="3"></button>
+      <button class="button" id="4"></button>
+      <button class="button" id="5"></button>
+      <button class="button" id="6"></button>
+      <button class="button" id="7"></button>
+      <button class="button" id="8"></button>
+    </div>
+
+    <div class="above-footer">
+      <div class="timer" id="timer"></div>
+      <button class="btn btn-primary mt-4" onclick="startGame()">Inizia Gioco</button>
+      <div id="score" class="mt-3">Punteggio: 0</div>
+    </div>
+
+    <div id="endPopup">
+      <h3>Il gioco è finito!</h3>
+      <p>Vuoi ricominciare?</p>
+      <button id="restartBtn" class="btn btn-success">Ricomincia</button>
+      <button id="quitBtn" class="btn btn-danger">Esci</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let sequence = [];
+      let userSequence = [];
+      let score = 0;
+      let gameInProgress = false;
+      let timerInterval;
+      let timeRemaining = 10;
+      let isFlashing = false;
+      let flashIntervalTime = 1000;
+
+      function startGame() {
+        score = 0;
+        userSequence = [];
+        sequence = [];
+        flashIntervalTime = 1000;
+        gameInProgress = true;
+        document.getElementById('score').textContent = `Punteggio: ${score}`;
+        nextRound();
+      }
+
+      function nextRound() {
+        if (!gameInProgress) return;
+
+        let randomButton = Math.floor(Math.random() * 9);
+        sequence.push(randomButton);
+
+        flashSequence();
+      }
+
+      function flashSequence() {
+        userSequence = [];
+        let i = 0;
+        const buttons = document.querySelectorAll('.button');
+        buttons.forEach(button => button.disabled = true);
+        isFlashing = true;
+
+        const flashInterval = setInterval(() => {
+          const currentButton = document.getElementById(sequence[i]);
+          currentButton.classList.add('flash');
+          
+          setTimeout(() => {
+            currentButton.classList.remove('flash');
+          }, 500);
+          
+          i++;
+          if (i >= sequence.length) {
+            clearInterval(flashInterval);
+            setTimeout(() => {
+              buttons.forEach(button => button.disabled = false);
+              isFlashing = false;
+              resetAndStartTimer();
+            }, 500);
+          }
+        }, flashIntervalTime);
+      }
+
+      function resetAndStartTimer() {
+        timeRemaining = 10;
+        document.getElementById('timer').textContent = `Tempo rimanente: ${timeRemaining}s`;
+
+        if (timerInterval) {
+          clearInterval(timerInterval);
+        }
+
+        timerInterval = setInterval(() => {
+          timeRemaining--;
+          document.getElementById('timer').textContent = `Tempo rimanente: ${timeRemaining}s`;
+
+          if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            checkUserSequence();
+          }
+        }, 1000);
+      }
+
+      function checkUserSequence() {
+        const userInput = [...userSequence];
+        const correct = JSON.stringify(userInput) === JSON.stringify(sequence);
+
+        if (correct) {
+          score++;
+          document.getElementById('score').textContent = `Punteggio: ${score}`;
+          flashIntervalTime = Math.max(500, flashIntervalTime - 100);
+          nextRound();
+        } else {
+          showEndPopup();
+        }
+      }
+
+      function showEndPopup() {
+        gameInProgress = false;
+        document.getElementById('score').textContent = `Punteggio finale: ${score}`;
+        document.getElementById('endPopup').style.display = 'block';
+      }
+
+      document.querySelectorAll('.button').forEach(button => {
+        button.addEventListener('click', (e) => {
+          if (!gameInProgress) return;
+
+          const buttonId = parseInt(e.target.id);
+          userSequence.push(buttonId);
+          e.target.classList.add('flash');
+          setTimeout(() => {
+            e.target.classList.remove('flash');
+          }, 500);
+
+          if (userSequence.length === sequence.length) {
+            checkUserSequence();
+            clearInterval(timerInterval);
+          }
+        });
+      });
+
+      document.getElementById('restartBtn').addEventListener('click', () => {
+        document.getElementById('endPopup').style.display = 'none';
+        startGame();
+      });
+
+      document.getElementById('quitBtn').addEventListener('click', () => {
+        window.location.reload();
+      });
+    </script>
+
+    <footer class="bg-black fixed-bottom text-center p-3">
+      <p>Memory Game</p>
+    </footer>
+
+  </body>
+</html>

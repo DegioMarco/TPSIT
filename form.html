@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea un Post</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .radio-group {
+            margin-bottom: 15px;
+        }
+
+        .radio-group label {
+            font-weight: normal;
+            color: #555;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-text {
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Modulo per creare un post</h1>
+        <form id="postForm">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="message">Messaggio:</label>
+            <textarea id="message" name="message" required></textarea><br>
+
+            <div class="radio-group">
+                <label>Visibilità:</label><br>
+                <label for="public">
+                    <input type="radio" id="public" name="visibility" value="pubblico" checked>
+                    Pubblico
+                </label><br>
+                <label for="private">
+                    <input type="radio" id="private" name="visibility" value="privato">
+                    Privato
+                </label>
+            </div>
+
+            <button type="submit">Invia</button>
+        </form>
+
+        <div id="result">
+            <div class="result-text" id="resultText"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("postForm").addEventListener("submit", function(event){
+            event.preventDefault(); 
+            
+            var name = document.getElementById("name").value;
+            var message = document.getElementById("message").value;
+            var visibility = document.querySelector('input[name="visibility"]:checked').value;
+
+            var resultText = `<strong>Nome:</strong> ${name}<br><strong>Messaggio:</strong> ${message}<br><strong>Visibilità:</strong> ${visibility}`;
+
+            document.getElementById("result").style.display = "block";
+            document.getElementById("resultText").innerHTML = resultText;
+        });
+    </script>
+
+</body>
+</html>

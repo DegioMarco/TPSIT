@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore di Frasi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        input {
+            width: 95%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Generatore di Frasi</h1>
+
+    <div class="container">
+        <div class="input-group">
+            <label for="soggetto">Nome (Soggetto):</label>
+            <input type="text" id="soggetto" placeholder="Es: Mario">
+        </div>
+        <div class="input-group">
+            <label for="verbo">Verbo:</label>
+            <input type="text" id="verbo" placeholder="Es: mangia">
+        </div>
+        <div class="input-group">
+            <label for="complemento">Complemento:</label>
+            <input type="text" id="complemento" placeholder="Es: una mela">
+        </div>
+        <button onclick="generaFrase()">Genera Frase</button>
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        function generaFrase() {
+            const soggetto = document.getElementById("soggetto").value.trim();
+            const verbo = document.getElementById("verbo").value.trim();
+            const complemento = document.getElementById("complemento").value.trim();
+
+            if (soggetto && verbo && complemento) {
+                const frase = `${soggetto} ${verbo} ${complemento}`;
+                document.getElementById("output").textContent = "Frase generata: " + frase;
+            } else {
+                document.getElementById("output").textContent = "Per favore, compila tutti i campi!";
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form e Function in JS</title>
+</head>
+<body>
+  <h2>Form e Function in JS</h2>
+  
+  <form id="mathForm">
+    <label for="a">Numero a:</label>
+    <input type="number" id="a" required><br><br>
+
+    <label for="b">Numero b:</label>
+    <input type="number" id="b" required><br><br>
+
+    <label for="c">Numero c:</label>
+    <input type="number" id="c" required><br><br>
+
+    <label for="d">Numero d:</label>
+    <input type="number" id="d" required><br><br>
+
+    <button type="submit">Calcola</button>
+  </form>
+
+  <h3>Risultati:</h3>
+  <p>Primo Valore: <span id="output1"></span></p>
+  <p>Secondo Valore: <span id="output2"></span></p>
+
+  <script>
+    function calculateOutputs(a, b, c, d) {
+      const firstOutput = (a + b + c + d) * 2;
+      const secondOutput = Math.log(firstOutput);
+      return [firstOutput, secondOutput];
+    }
+
+    document.getElementById('mathForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const a = parseFloat(document.getElementById('a').value);
+      const b = parseFloat(document.getElementById('b').value);
+      const c = parseFloat(document.getElementById('c').value);
+      const d = parseFloat(document.getElementById('d').value);
+
+      const [output1, output2] = calculateOutputs(a, b, c, d);
+
+      document.getElementById('output1').textContent = output1.toFixed(2);
+      document.getElementById('output2').textContent = output2.toFixed(2);
+    });
+  </script>
+</body>
+</html>
